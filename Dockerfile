@@ -16,6 +16,7 @@ RUN echo xdebug.remote_enable=on >> $xdebug_ini \
     && echo xdebug.remote_autostart=on >> $xdebug_ini \
     && echo xdebug.remote_connect_back=off >> $xdebug_ini \
     && echo xdebug.idekey=PHP_STORM >> $xdebug_ini \
-    && echo xdebug.remote_host=host.docker.internal >> $xdebug_ini
+    && echo xdebug.remote_connect_back=on >> $xdebug_ini
+#    && echo xdebug.remote_host=host.docker.internal >> $xdebug_ini
 
 

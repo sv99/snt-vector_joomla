@@ -1,26 +1,40 @@
 sny-vector based on Joomla Framevork
 ====================================
 
-sprinthost.ru
+[Настройка окружения для PHP разработчиков](https://habr.com/post/314032/)
+
+Проблема при настройке окружения для docker-machine. 
+Сделал image и собрал его на новом Mac и разместил его в [Docker Hub](https://hub.docker.com/)
+```bash
+eval $(docer-machine env default)
+docker login
+docker tag snt-vector_joomla_web sv99/snt-vector_joomla_web
+docker push sv99/snt-vector_joomla_web
+```
+
+Размер snt-vector_joomla_web 164Mb
 
 mysql
 -----
 
-MySQL version 5.7.22-22
+У провайдер sprinthost.ru MySQL version 5.7.22-22
 ```sql
 SELECT VERSION();
 # Creeate if not exists
 CREATE DATABASE IF NOT EXISTS a0236142_app_joomla_0 CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-
 ```
 База данных a0236142_app_joomla_0
 
-Creating database dumps on docker
+Если монтировать каталог для хранения баз в /var/lib/mysql
+то не создается база, указанная в MYSQL_DATABASE.
+Если его не монтировать, то база создается.
+Выяснил, что в docker-machine mysql не работаеть с примонтированной
+через VirtualBox папкой - ругается на права.
+Пришлось отказаться от сохранения данных и сделать два скрипта для
+оперативной загрузки данных в рабочий образ.
 ```bash
-# backup database a0236142_app_joomla_0
-docker exec snt-vector_joomla_mysql_1 sh -c 'exec mysqldump -uroot -p"$MYSQL_ROOT_PASSWORD" a0236142_app_joomla_0 > /backup/a0236142_app_joomla_0.sql'
-# restore from backup
-docker exec snt-vector_joomla_mysql_1 sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" a0236142_app_joomla_0 < /backup/a0236142_app_joomla_0.sql'
+./restore_db.sh
+./dump_db.sh
 ```
 
 joomla
