@@ -3,9 +3,12 @@ sny-vector based on Joomla Framevork
 
 [Настройка окружения для PHP разработчиков](https://habr.com/post/314032/)
 
+[Как сверстать шаблон для Joomla](https://habr.com/post/256635/)
+
 Проблема при настройке окружения для docker-machine. 
 Сделал image и собрал его на новом Mac и разместил его в [Docker Hub](https://hub.docker.com/)
 ```bash
+# init environment for docker-machine
 eval $(docer-machine env default)
 docker login
 docker tag snt-vector_joomla_web sv99/snt-vector_joomla_web
@@ -31,10 +34,11 @@ CREATE DATABASE IF NOT EXISTS a0236142_app_joomla_0 CHARACTER SET utf8 COLLATE u
 Выяснил, что в docker-machine mysql не работаеть с примонтированной
 через VirtualBox папкой - ругается на права.
 Пришлось отказаться от сохранения данных и сделать два скрипта для
-оперативной загрузки данных в рабочий образ.
+оперативной загрузки данных в рабочий образ через примонтированную папку backup.
 ```bash
-./restore_db.sh
-./dump_db.sh
+# file name optional - default /backup/a0236142_app_joomla_0.sql
+./restore_db.sh <backup/backup_name.sql>
+./dump_db.sh <backup/dump_name.sql>
 ```
 
 joomla
